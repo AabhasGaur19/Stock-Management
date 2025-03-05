@@ -1,9 +1,18 @@
-function App() {
-  return (
-    <>
-      <h1 className="bg-blue-500">Hi</h1>
-    </>
-  )
-}
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from "./screens/LoginPage";
+import SignupPage from "./screens/SignupPage";
 
-export default App
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        {/* Define routes for Login and Signup */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;

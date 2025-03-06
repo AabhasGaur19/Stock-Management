@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
-import supabase from "../../supabase-client"
-
+import supabase from "../../supabase-client";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -21,8 +21,24 @@ const LoginPage = () => {
       });
       if (error) throw error;
       console.log("Login successful", data);
-      alert("Sucessfull!!"); 
-      // navigate("/");
+      alert("Successful!!");
+      navigate("/dashboard");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setError(null);
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      });
+      if (error) throw error;
+      console.log("Google Login initiated", data);
     } catch (error) {
       setError(error.message);
     }
@@ -47,7 +63,10 @@ const LoginPage = () => {
             transition={{ duration: 0.5 }}
             className="relative"
           >
-            <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Email:
             </label>
             <div className="relative">
@@ -70,7 +89,10 @@ const LoginPage = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="relative"
           >
-            <label htmlFor="password" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Password:
             </label>
             <div className="relative">
@@ -96,6 +118,15 @@ const LoginPage = () => {
             Login
           </motion.button>
         </form>
+
+        <motion.button
+          onClick={handleGoogleLogin}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="w-full mt-4 py-3 bg-white border flex items-center justify-center gap-2 text-gray-800 font-bold rounded-lg shadow-md hover:bg-gray-200 transition-all"
+        >
+          <FcGoogle className="text-xl" /> Sign in with Google
+        </motion.button>
 
         <p className="text-center text-gray-700 mt-4">
           Don't have an account?{" "}
